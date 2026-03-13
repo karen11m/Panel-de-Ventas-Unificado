@@ -1,0 +1,14 @@
+# Panel de Ventas Unificado - Requerimientos
+
+# Core
+pandas>=2.0.0
+requests>=2.31.0
+
+# Dashboard
+streamlit>=1.28.0
+
+# Base de datos (incluido en Python estándar)
+# sqlite3
+
+# Utilidades
+python-dotenv>=1.0.0

@@ -1,0 +1,38 @@
+name: Actualizar Datos de Ventas
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Diario a las 6:00 AM
+  workflow_dispatch:  # Permite ejecución manual
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+      
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Instalar dependencias
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Ejecutar ETL
+        env:
+          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
+          ML_CLIENT_ID: ${{ secrets.ML_CLIENT_ID }}
+          ML_CLIENT_SECRET: ${{ secrets.ML_CLIENT_SECRET }}
+          ML_REFRESH_TOKEN: ${{ secrets.ML_REFRESH_TOKEN }}
+        run: |
+          python -m etl.process
+      
+      - name: Commit cambios
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Actualización automática de datos"
+          file_pattern: data/*.db
